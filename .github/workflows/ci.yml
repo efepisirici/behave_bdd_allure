@@ -9,6 +9,22 @@ on:
       - master
 
 jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Build the Docker image from the Dockerfile
+      - name: Build Docker image
+        run: docker build -t ci-pipeline .
+
+      # Run tests inside the Docker container and export it to results in same folder 
+      - name: Run tests inside Docker container
+        run: |
+          docker run -v $(pwd)/features/reports:/app/features/reports ci-pipeline
+
   test:
     runs-on: ubuntu-latest
 
