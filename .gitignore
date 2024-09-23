@@ -7,3 +7,4 @@
 *.exe
 /features/reports
 venv/*
+/features/*
