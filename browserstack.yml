@@ -1,0 +1,15 @@
+userName: <ENTER BROWSERSTACK USERNAME>
+accessKey: <ENTER BROWSERSTACK KEY>
+platforms:
+  - os: Windows
+    osVersion: 11
+    browserName: chrome
+    browserVersion: latest
+  - os: OS X
+    osVersion: Ventura
+    browserName: playwright-webkit
+    browserVersion: latest
+  - os: Windows
+    osVersion: 11
+    browserName: playwright-firefox
+    browserVersion: latest
