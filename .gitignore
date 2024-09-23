@@ -5,6 +5,4 @@
 *.html
 *.pyc
 *.exe
-/features/reports
 venv/*
-/features/allure-report

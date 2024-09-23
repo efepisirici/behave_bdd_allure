@@ -42,14 +42,25 @@ jobs:
           sudo mv allure-2.20.1 /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
-      - name: Run tests and generate Allure report
+      - name: Create directories for Allure results and history
         run: |
-          mkdir -p features/reports
-          behave -f allure_behave.formatter:AllureFormatter -o features/reports --no-capture -k || true
+          mkdir -p features/reports/allure-results/history
+
+      # Step to retrieve previous Allure history from a branch
+      - name: Download Allure history from branch
+        run: |
+          git fetch origin allure-history-branch
+          git checkout origin/allure-history-branch -- features/reports || echo "No previous history found"
+
+      - name: Run tests and generate Allure results
+        run: |
+          mkdir -p features/reports/allure-results
+          behave -f allure_behave.formatter:AllureFormatter -o features/reports/allure-results  || true
+          cp -R features/reports/allure-results/* features/reports
 
       - name: Generate Allure Report
         run: |
-          allure generate features/reports -o features/allure-report --clean
+          allure generate features/reports/allure-results -o features/allure-report --clean
 
       - name: Upload Allure HTML report as artifact
         uses: actions/upload-artifact@v3
@@ -57,6 +68,32 @@ jobs:
           name: allure-html-report
           path: features/allure-report
           retention-days: 5
+
+      - name: Handle untracked files (move to temp)
+        run: |
+          mkdir -p temp
+          mv features/allure-report/* temp/ || echo "No files to move"
+
+      - name: Commit and push Allure history to branch
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          
+          # Fetch the latest history branch
+          git fetch origin allure-history-branch
+
+          # Checkout the history branch and merge the latest changes
+          git checkout allure-history-branch || git checkout -b allure-history-branch
+          git pull origin allure-history-branch --no-edit
+
+          # Add both directories explicitly to track history and reports
+          git add features/reports/ features/allure-report/
+
+          # Commit the changes if any
+          git commit -m "Update Allure history and report" || echo "No changes to commit"
+
+          # Push changes back to the branch without force
+          git push origin allure-history-branch
 
   deploy:
     runs-on: ubuntu-latest
