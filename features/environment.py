@@ -30,13 +30,3 @@ def before_scenario(context, scenario):
 
 def after_scenario(context, scenario):
     pass
-   #  if scenario.status == Status.failed and getattr(context, scenario.scenario_retries, 0) < RETRY_COUNT:
-   #      print(f"Retrying scenario '{scenario.name}' ({context.scenario_retries + 1}/{RETRY_COUNT}) due to failure.")
-   #      context.scenario_retries += 1
-   #     scenario.clear_steps()
-   #     context.driver.quit()
-   #      context.failed = True  # Mark to retry
-   #  elif scenario.status == Status.failed:
-   #      print(f"Scenario '{scenario.name}' failed after {RETRY_COUNT} retries.")
-   # else:
-   #      context.failed = False  # Reset retry status

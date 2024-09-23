@@ -71,10 +71,10 @@ jobs:
           name: allure-html-report
           path: features/allure-report
 
-      - name: Deploy Allure report to GitHub Pages
+      - name: Deploy Allure report to a separate branch
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./features/allure-report
-          publish_branch: master
+          publish_branch: main
           force_orphan: true
