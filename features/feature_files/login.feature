@@ -9,3 +9,7 @@ Feature: User Login to katalon-demo-cura application
     Examples:
       | username    | password|
       | John Doe  | ThisIsNotAPassword|
+
+  Scenario: Fail Test
+    Given I am failure
+  

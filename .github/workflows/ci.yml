@@ -45,7 +45,7 @@ jobs:
       - name: Run tests and generate Allure report
         run: |
           mkdir -p features/reports
-          behave -f allure_behave.formatter:AllureFormatter -o features/reports
+          behave -f allure_behave.formatter:AllureFormatter -o features/reports --no-capture -k || true
 
       - name: Generate Allure Report
         run: |

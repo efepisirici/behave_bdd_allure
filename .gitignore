@@ -7,4 +7,4 @@
 *.exe
 /features/reports
 venv/*
-/features/*
+/features/allure-report

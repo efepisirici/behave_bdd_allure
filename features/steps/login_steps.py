@@ -9,6 +9,12 @@ def step_given_on_login_page(context, url):
     context.driver.get(url)
     context.login_page = LoginPage(context.driver)
 
+
+@given('I am failure')
+@allure.step("User navigates to login page {url}")
+def step_given_fail(context, url):
+    raise NotImplementedError
+
 @when('I enter a valid username "{username}" and password "{password}"')
 @allure.step('User can enter username - "{username}" and password - "{password}"')
 def step_when_enter_credentials(context,username, password):
