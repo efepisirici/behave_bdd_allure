@@ -24,14 +24,16 @@ def before_all(context):
     print("Initialized WebDriver and other global settings before all tests.")
 
 def after_step(context, step):
-    if step.status == Status.failed or step.status == Status.passed:
-        screenshot_name = sanitize_filename(f"{step.name}_{step.status.name.lower()}.png")
-        screenshot_path = os.path.join(context.allure_report_dir, screenshot_name)
-        try:
-            context.driver.save_screenshot(screenshot_path)
-            attach_screenshot_to_allure(screenshot_path)
-        except Exception as e:
-            print(f"Failed to capture screenshot: {e}")
+    # Check if the scenario has an @api tag, and if so, do not take a screenshot
+    if 'api' not in context.tags:
+        if step.status == Status.failed or step.status == Status.passed:
+            screenshot_name = sanitize_filename(f"{step.name}_{step.status.name.lower()}.png")
+            screenshot_path = os.path.join(context.allure_report_dir, screenshot_name)
+            try:
+                context.driver.save_screenshot(screenshot_path)
+                attach_screenshot_to_allure(screenshot_path)
+            except Exception as e:
+                print(f"Failed to capture screenshot: {e}")
 
 def after_all(context):
     if context.driver:
