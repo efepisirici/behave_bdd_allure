@@ -50,13 +50,16 @@ jobs:
       - name: Download Allure history from branch
         run: |
           git fetch origin allure-history-branch
-          git checkout origin/allure-history-branch -- features/reports || echo "No previous history found"
+          git checkout origin/allure-history-branch -- features/reports/allure-results/history || echo "No previous history found"
 
       - name: Run tests and generate Allure results
         run: |
           mkdir -p features/reports/allure-results
-          behave -f allure_behave.formatter:AllureFormatter -o features/reports/allure-results  || true
-          cp -R features/reports/allure-results/* features/reports
+          behave -f allure_behave.formatter:AllureFormatter -o features/reports/allure-results || true
+          
+      - name: Merge previous Allure history
+        run: |
+          cp -R features/reports/allure-results/history/* features/reports/allure-results/ || echo "No previous history to merge"
 
       - name: Generate Allure Report
         run: |
@@ -76,24 +79,30 @@ jobs:
 
       - name: Commit and push Allure history to branch
         run: |
+          git config pull.rebase false
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           
+          # Add all changes or stash untracked ones
+          git add --all || git stash
+
           # Fetch the latest history branch
           git fetch origin allure-history-branch
 
-          # Checkout the history branch and merge the latest changes
+          # Checkout the history branch
           git checkout allure-history-branch || git checkout -b allure-history-branch
-          git pull origin allure-history-branch --no-edit
 
-          # Add both directories explicitly to track history and reports
-          git add features/reports/ features/allure-report/
+          # Pull changes and merge allowing unrelated histories
+          git pull origin allure-history-branch --no-edit --allow-unrelated-histories || echo "No changes to pull"
+
+          # Add the directories to track history and reports
+          git add features/reports/ features/allure-report/ features/reports/allure-results/
 
           # Commit the changes if any
           git commit -m "Update Allure history and report" || echo "No changes to commit"
 
-          # Push changes back to the branch without force
-          git push origin allure-history-branch
+          # Push changes back to the branch with force to ensure sync
+          git push origin allure-history-branch --force
 
   deploy:
     runs-on: ubuntu-latest
