@@ -1,0 +1,1 @@
+{"total":2,"items":[{"uid":"584aed48cb9cf9224e917dba9f39a895","name":"User Login to katalon-demo-cura application","statistic":{"failed":0,"broken":2,"skipped":0,"passed":1,"unknown":0,"total":3}},{"uid":"59b8f096bafb9bb07c9fb641c90d28d1","name":"Test the User API","statistic":{"failed":0,"broken":0,"skipped":0,"passed":3,"unknown":0,"total":3}}]}
