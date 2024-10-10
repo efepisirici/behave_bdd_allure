@@ -13,7 +13,7 @@ Feature: User Login to katalon-demo-cura application
 
   @positive @ui @severity.minor
   Scenario Outline: Fail This Test For Report
-    Given I am on the login page "https://katalon-demo-cura.herokuapp.com/profile.php"
+    Given I am on the login page "https://katalon-demo-cura.herokuapp.com/"
     When I enter a valid username "<username>" and password "<password>"
     And I click the login button
     Then I should be redirected to the dashboard page
