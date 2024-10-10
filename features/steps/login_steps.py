@@ -18,8 +18,8 @@ def step_given_fail(context, url):
 @when('I enter a valid username "{username}" and password "{password}"')
 @allure.step('User can enter username - "{username}" and password - "{password}"')
 def step_when_enter_credentials(context,username, password):
-    context.login_page.enter_username(username)
-    context.login_page.enter_password(password)
+    assert context.login_page.enter_username(username),f"Cannot bee able to set spesified username : {username}"
+    assert context.login_page.enter_password(password),f"Cannot bee able to set spesified password : {password}"
 
 @when('I click the login button')
 @allure.step('User can can click on login button')

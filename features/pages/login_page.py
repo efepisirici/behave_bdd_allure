@@ -12,13 +12,20 @@ class LoginPage(BasePage):
     WRONG_LOGIN_MSG = (By.XPATH, '//p[@class="lead text-danger"]')
 
     def enter_username(self, username):
-        login_field = self.find_element(self.LOGIN_INPUT)
-        login_field.send_keys(username)
+        try:
+            login_field = self.find_element(self.LOGIN_INPUT)
+            login_field.send_keys(username)
+            return True
+        except Exception:
+            return False
 
     def enter_password(self, password):
-        password_field = self.find_element(self.PASSWORD_INPUT)
-        password_field.send_keys(password)
-
+        try:
+            password_field = self.find_element(self.PASSWORD_INPUT)
+            password_field.send_keys(password)
+            return True
+        except Exception:
+            return False
     def click_submit(self):
         submit_button = self.find_element(self.SUBMIT_BUTTON)
         submit_button.click()
@@ -27,5 +34,5 @@ class LoginPage(BasePage):
         try:
             wrong_msg = self.find_element(self.WRONG_LOGIN_MSG)
             return wrong_msg.is_displayed()
-        except:
+        except Exception:
          return False

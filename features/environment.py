@@ -10,18 +10,19 @@ from behave.model_core import Status
 def sanitize_filename(filename):
     return re.sub(r'[\\/*?:"<>|]', "_", filename)
 
-def before_all(context):
+def before_scenario(context, scenario):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
 
+    # Start a Chrome session for each scenario
     context.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     context.driver.set_page_load_timeout(30)  # Add a timeout to avoid connection issues
     context.driver.maximize_window()
     context.allure_report_dir = os.path.join("features", "reports")
     os.makedirs(context.allure_report_dir, exist_ok=True)
-    print("Initialized WebDriver and other global settings before all tests.")
+    print(f"Initialized WebDriver for scenario: {scenario.name}")
 
 def after_step(context, step):
     # Check if the scenario has an @api tag, and if so, do not take a screenshot
@@ -35,10 +36,11 @@ def after_step(context, step):
             except Exception as e:
                 print(f"Failed to capture screenshot: {e}")
 
-def after_all(context):
+def after_scenario(context, scenario):
+    # Kill Chrome session after each scenario
     if context.driver:
         context.driver.quit()
-    print("Closed WebDriver and cleaned up after all tests.")
+    print(f"Closed WebDriver for scenario: {scenario.name}")
 
 def attach_screenshot_to_allure(filepath):
     with open(filepath, 'rb') as image_file:
