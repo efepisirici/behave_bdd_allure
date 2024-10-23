@@ -66,8 +66,8 @@ jobs:
       # Step to retrieve previous Allure history from a branch
       - name: Download Allure history from branch
         run: |
-          git fetch origin allure-history-branch
-          git checkout origin/allure-history-branch -- features/reports/allure-results/history || echo "No previous history found"
+          git fetch origin history-branch
+          git checkout origin/history-branch -- features/reports/allure-results/history || echo "No previous history found"
 
       - name: Run tests and generate Allure results
         run: |
@@ -104,13 +104,13 @@ jobs:
           git add --all || git stash
 
           # Fetch the latest history branch
-          git fetch origin allure-history-branch
+          git fetch origin history-branch
 
           # Checkout the history branch
-          git checkout allure-history-branch || git checkout -b allure-history-branch
+          git checkout history-branch || git checkout -b history-branch
 
           # Pull changes and merge allowing unrelated histories
-          git pull origin allure-history-branch --no-edit --allow-unrelated-histories || echo "No changes to pull"
+          git pull origin history-branch --no-edit --allow-unrelated-histories || echo "No changes to pull"
 
           # Add the directories to track history and reports
           git add features/reports/ features/allure-report/ features/reports/allure-results/
@@ -119,7 +119,7 @@ jobs:
           git commit -m "Update Allure history and report" || echo "No changes to commit"
 
           # Push changes back to the branch with force to ensure sync
-          git push origin allure-history-branch --force
+          git push origin history-branch --force
 
   test_execution:
     runs-on: ubuntu-latest
