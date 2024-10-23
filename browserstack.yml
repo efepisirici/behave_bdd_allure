@@ -4,6 +4,7 @@ platforms:
   - os: Windows
     osVersion: 11
     browserName: chrome
+    
     browserVersion: latest
   - os: OS X
     osVersion: Ventura
