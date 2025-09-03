@@ -25,6 +25,8 @@ jobs:
       - name: Run tests inside Docker container
         run: |
           docker run -v $(pwd)/features/reports:/app/features/reports ci-pipeline
+      - name: MegaLinter
+        uses: oxsecurity/megalinter@v8.8.0
 
   environment_setup:
     runs-on: ubuntu-latest
